@@ -1,4 +1,5 @@
-import { Observable, PartialObserver } from 'rxjs';
+import { Observable, PartialObserver, ConnectableObservable } from 'rxjs';
+import { publish } from 'rxjs/operators';
 
 interface TransmitterData {
   spaceshipId: string;
@@ -18,18 +19,24 @@ const transmitterObservable$ = new Observable<TransmitterData>(subscriber => {
 });
 
 const spaceshipControlRoomObserver: PartialObserver<TransmitterData> = {
-  next(transmittedData: TransmitterData) { console.log(`Spaceship #${transmittedData.spaceshipId} passed by ${transmittedData.planet}.`); },
-  error(err) { console.error(`Ooops, something went terribly wrong: ${err}`); },
-  complete() { console.log('Spaceship reached its final destination!'); }
+  next(transmittedData: TransmitterData) { console.log(`[SPACE] Spaceship #${transmittedData.spaceshipId} passed by ${transmittedData.planet}.`); },
+  error(err) { console.error(`[SPACE] Ooops, something went terribly wrong: ${err}`); },
+  complete() { console.log('[SPACE] Spaceship reached its final destination!'); }
 };
 
 const earthControlRoomObserver: PartialObserver<TransmitterData> = {
-  next(transmittedData: TransmitterData) { console.log(`Spaceship #${transmittedData.spaceshipId} reported passing by ${transmittedData.planet}.`); },
-  error(err) { console.error(`Lost connection: ${err}`); },
-  complete() { console.log('Spaceship reported reaching its final destination!'); }
+  next(transmittedData: TransmitterData) { console.log(`[EARTH] Spaceship #${transmittedData.spaceshipId} reported passing by ${transmittedData.planet}.`); },
+  error(err) { console.error(`[EARTH] Lost connection: ${err}`); },
+  complete() { console.log('[EARTH] Spaceship reported reaching its final destination!'); }
 };
 
 console.log('Are Observables asynchronous?');
 transmitterObservable$.subscribe(spaceshipControlRoomObserver);
-transmitterObservable$.subscribe(earthControlRoomObserver);
+// transmitterObservable$.subscribe(earthControlRoomObserver);
+
+// const multicastTransmitterObservable$: ConnectableObservable<TransmitterData> = <ConnectableObservable<TransmitterData>>transmitterObservable$.pipe(publish());
+// multicastTransmitterObservable$.subscribe(spaceshipControlRoomObserver);
+// multicastTransmitterObservable$.subscribe(earthControlRoomObserver);
+// multicastTransmitterObservable$.connect();
+
 //console.log('Here is the answer: YES/NO');
