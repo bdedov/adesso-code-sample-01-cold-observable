@@ -15,7 +15,7 @@ const transmitterObservable$ = new Observable<TransmitterData>(subscriber => {
 
   subscriber.complete();
 
-  //subscriber.next('Pluto');
+  // subscriber.next({ planet: 'Pluto', spaceshipId });
 });
 
 const spaceshipControlRoomObserver: PartialObserver<TransmitterData> = {
@@ -33,10 +33,9 @@ const earthControlRoomObserver: PartialObserver<TransmitterData> = {
 console.log('Are Observables asynchronous?');
 transmitterObservable$.subscribe(spaceshipControlRoomObserver);
 // transmitterObservable$.subscribe(earthControlRoomObserver);
+// console.log('Here is the answer: YES/NO');
 
 // const multicastTransmitterObservable$: ConnectableObservable<TransmitterData> = <ConnectableObservable<TransmitterData>>transmitterObservable$.pipe(publish());
 // multicastTransmitterObservable$.subscribe(spaceshipControlRoomObserver);
 // multicastTransmitterObservable$.subscribe(earthControlRoomObserver);
 // multicastTransmitterObservable$.connect();
-
-//console.log('Here is the answer: YES/NO');
